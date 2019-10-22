@@ -1,0 +1,12 @@
+.holder {
+    display: flex;
+    margin-top: 15px;
+    width: 200px;
+    height: 50px;
+
+    span {
+        font-size: 55px;
+        text-decoration: slateblue solid underline;
+        text-decoration-skip-ink: auto;
+    }
+}
