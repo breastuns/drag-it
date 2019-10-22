@@ -1,0 +1,10 @@
+.draggable-item {
+    position: absolute;
+    height: 60px;
+    width: 60px;
+
+    &.circle {
+        border: transparent 1px solid;
+        border-radius: 35px;
+    }
+}
