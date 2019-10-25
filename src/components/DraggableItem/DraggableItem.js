@@ -1,43 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { ThemeContext } from '../../App';
 import './DraggableItem.scss';
 import { fromEvent } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 
 export function DraggableItem(props) {
-  const colors = ['#b270db', '#DB7093', '#80db70', '#dbd270', '#70dbcb', '#db7070'];
+  const [theme, setTheme] = useContext(ThemeContext);
+  const colorsArray = ['pink', 'blue', 'purple', 'green', 'yellow'];
+  const getRandomColor = () => {
+    return colorsArray[Math.floor(Math.random() * colorsArray.length)];
+  };
+  const getRandomTopPosition = () => {
+    return Math.floor(Math.random() * (document.body.offsetHeight - 70));
+  };
+  const getRandomLeftPosition = () => {
+    return Math.floor(Math.random() * (document.body.offsetWidth - 70));
+  };
 
-  const [topPosition, setTopPosition] = useState(0);
-  const [leftPosition, setLeftPosition] = useState(0);
-  const [backgroundColor, setBackgroundColor] = useState(
-    colors[Math.floor(Math.random() * colors.length)]
-  );
-  let boxElement;
+  const [topPosition, setTopPosition] = useState(getRandomTopPosition());
+  const [leftPosition, setLeftPosition] = useState(getRandomLeftPosition());
+  const randomColor = getRandomColor();
+  const [backgroundColor, setBackgroundColor] = useState({
+    colorValue: theme[randomColor],
+    colorName: randomColor
+  });
 
-  useEffect(() => {
-    boxElement = document.getElementById(`${props.type}`);
-    const drag$ = fromEvent(document, 'mousemove');
-    const up$ = fromEvent(boxElement, 'mouseup');
-    const down$ = fromEvent(boxElement, 'mousedown');
-
-    down$
-      .pipe(
-        switchMap(() => {
-          setBackgroundColor(colors[Math.floor(Math.random() * colors.length)]);
-          return drag$.pipe(takeUntil(up$));
-        })
-      )
-      .subscribe(event => {
-        setTopPosition(event.clientY - 20);
-        setLeftPosition(event.clientX - 20);
+  useEffect(
+    () => {
+      setBackgroundColor({
+        colorValue: theme[backgroundColor.colorName],
+        colorName: backgroundColor.colorName
       });
-  }, []);
+      const boxElement = document.getElementById(`${props.id}`);
+      const drag$ = fromEvent(document, 'mousemove');
+      const up$ = fromEvent(boxElement, 'mouseup');
+      const down$ = fromEvent(boxElement, 'mousedown');
+
+      const subscriber = down$
+        .pipe(
+          switchMap(() => {
+            const randomColor = getRandomColor();
+            setBackgroundColor({ colorValue: theme[randomColor], colorName: randomColor });
+            return drag$.pipe(takeUntil(up$));
+          })
+        )
+        .subscribe(event => {
+          setTopPosition(event.clientY - 20);
+          setLeftPosition(event.clientX - 20);
+        });
+
+      return () => {
+        subscriber.unsubscribe();
+      };
+    },
+    [theme]
+  );
 
   return (
     <div>
       <div
-        id={props.type}
+        id={props.id}
         className={`draggable-item ${props.type}`}
-        style={{ top: `${topPosition}px`, left: `${leftPosition}px`, backgroundColor }}
+        style={{
+          top: `${topPosition}px`,
+          left: `${leftPosition}px`,
+          backgroundColor: backgroundColor.colorValue
+        }}
       />
     </div>
   );
