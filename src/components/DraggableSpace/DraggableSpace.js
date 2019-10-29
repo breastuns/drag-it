@@ -6,7 +6,7 @@ import './DraggableSpace.scss';
 export function DraggableSpace() {
   let boxElements = [];
   let circleElements = [];
-  for (let i = 0; i <= 10; i++) {
+  for (let i = 1; i <= 10; i++) {
     boxElements.push(<DraggableItem type={'box'} id={'box' + i} key={'box' + i} />);
     circleElements.push(<DraggableItem type={'circle'} id={'circle' + i} key={'circle' + i} />);
   }

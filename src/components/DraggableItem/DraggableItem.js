@@ -56,17 +56,18 @@ export function DraggableItem(props) {
     [theme]
   );
 
-  return (
-    <div>
-      <div
-        id={props.id}
-        className={`draggable-item ${props.type}`}
-        style={{
-          top: `${topPosition}px`,
-          left: `${leftPosition}px`,
-          backgroundColor: backgroundColor.colorValue
-        }}
-      />
-    </div>
-  );
+    return (
+        <div>
+            <div
+                data-testid={props.type}
+                id={props.id}
+                className={`draggable-item ${props.type}`}
+                style={{
+                    top: `${topPosition}px`,
+                    left: `${leftPosition}px`,
+                    backgroundColor: backgroundColor.colorValue
+                }}
+            />
+        </div>
+    );
 }
