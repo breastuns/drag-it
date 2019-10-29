@@ -5,3 +5,7 @@ Grab a shape. Drag it! :boom: Drop it! :boom: Change it! :sparkles:
 ## specs
 * react 16.10.2
 * rxjs 6.5.3
+* react testing library
+
+## previw
+![drag-it preview](/public/drag-it.png)
